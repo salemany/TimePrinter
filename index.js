@@ -5,14 +5,14 @@ const fs = require('fs');
 const cron = require('node-cron');
 
 const app = express();
-
 app.set('port', process.env.PORT || 3000);
 
 async function fromDir(startPath,filter){
     var fecha = new Date();
     let hora = fecha.getHours();
 
-    let opt = (hora >= 16) ? {printer: 'LISTADOS'} : {printer: 'CHEQUES'};
+    //selecting a printer by the hour, this opt it's used on printer function
+    let opt = (hora >= 16) ? {printer: 'Printer_01'} : {printer: 'Printer_02'}; 
 
     if (!fs.existsSync(startPath)){
         console.log("no dir ",startPath);
@@ -21,17 +21,18 @@ async function fromDir(startPath,filter){
     
     let filesToPrint = [];
 
-    let files = fs.readdirSync(startPath, (err, files) => files.filter((e) => path.extname(e).toLowerCase() === '.pdf'));
+    let files = fs.readdirSync(startPath);
 
     for(var i=0;i<files.length;i++){
         let filename=path.join(startPath,files[i]);
         let stat = fs.lstatSync(filename);
         if (stat.isFile()){
-            if(filename.toLowerCase().endsWith(filter)){
-                filesToPrint.push(files[i]);
+            if(filename.toLowerCase().endsWith(filter)){ //filering by extension
+                //Saving an array whit the files to move later
+                filesToPrint.push(files[i]); 
 
                 Printer
-                    .print(filename, opt)
+                    .print(filename, opt) //Print the file on the printer
                     .then(console.log('Impresion: ', filename, ' Impresora: ', JSON.stringify(opt)))
                     .catch(console.error);
 
@@ -39,7 +40,8 @@ async function fromDir(startPath,filter){
             };
         };
     };
-
+    
+    //Wait 5 Sec to move Files to Proccess Directory
     await sleep(5000);
 
     for(var i = 0; i < filesToPrint.length; i++){            
@@ -49,10 +51,12 @@ async function fromDir(startPath,filter){
     }
 };
 
+//Sleep Function
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+//Run Every Minute, every day.
 cron.schedule('* * * * *', () => {
     fromDir(path.join(__dirname, 'Archivos/'),'.pdf');
   });
