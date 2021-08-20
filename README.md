@@ -3,4 +3,4 @@ Small module in NodeJS, which scans a directory for new files and prints them, o
 Node-Cron it's for scheduler task.
 pdf-to-printer it's to send a file to print
 
-The sleep(ms) function it's for wait a little time on print intervals and on the print and the action of file too.
+The sleep(ms) function is to wait for a while on print intervals.
