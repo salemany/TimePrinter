@@ -1,4 +1,4 @@
-This is a small module in NodeJS, which scans a directory for new files and prints them, on one printer or another depending on the server time.
+This is a small module in NodeJS, which scans a directory for new files filtered by extension, and print them all, on one printer or another depending on the server time. After print, move the files to another directory.
 
 Node-Cron is to scheduler task.
 pdf-to-printer is to send a file to print.
