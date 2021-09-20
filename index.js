@@ -9,7 +9,7 @@ app.set('port', process.env.PORT || 3000);
 
 async function fromDir(startPath,filter){
     var fecha = new Date();
-    let hora = fecha.getHours();
+    let hora = fecha.getHours(); //comentario de prueba
 
     //selecting a printer by the hour, this opt it's used on printer function
     let opt = (hora >= 16) ? {printer: 'Printer_01'} : {printer: 'Printer_02'}; 
